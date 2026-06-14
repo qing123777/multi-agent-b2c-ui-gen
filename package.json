@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "eslint": "^10.4.1",
+    "html-validate": "^11.4.0",
+    "stylelint": "^17.12.0"
+  }
+}

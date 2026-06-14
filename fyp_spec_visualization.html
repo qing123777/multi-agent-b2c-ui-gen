@@ -1,0 +1,501 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--cp:#4493f8;--cl:#8b949e;--cr:#2dd4bf;--cc:#a78bfa;--ch:#fb7185;--cf:#f59e0b;--cd:#34d399;--clk:#10b981}
+.wrap{font-family:var(--font-mono,monospace);font-size:12px;border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-tertiary)}
+.leg{display:flex;gap:10px;flex-wrap:wrap;padding:8px 16px;background:var(--color-background-secondary);border-bottom:1px solid var(--color-border-tertiary)}
+.li{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--color-text-secondary)}
+.ld{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.tnav{display:flex;gap:2px;padding:10px 16px 0;background:var(--color-background-secondary);border-bottom:1px solid var(--color-border-tertiary);overflow-x:auto}
+.tb{padding:6px 12px;background:none;border:none;border-bottom:2px solid transparent;color:var(--color-text-secondary);cursor:pointer;font-size:11px;font-family:var(--font-mono,monospace);border-radius:4px 4px 0 0;transition:all .15s;white-space:nowrap}
+.tb.on{color:var(--color-text-primary);border-bottom-color:var(--cc)}
+.pnl{display:none;padding:16px}
+.pnl.on{display:block}
+.sp{border:1.5px solid var(--cp);border-radius:10px;padding:12px}
+.sr{border:1.5px dashed var(--cr);border-radius:8px;padding:10px;margin-top:10px}
+.sc{border:1.5px solid var(--cc);border-radius:6px;padding:8px;margin-top:8px}
+.scr{border:1.5px dotted var(--cc);border-radius:5px;padding:7px;background:rgba(167,139,250,.04)}
+.sd{border:1.5px solid var(--cd);border-radius:8px;padding:10px}
+.sh{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;padding-bottom:7px;border-bottom:1px solid var(--color-border-tertiary)}
+.b{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:3px;font-size:10px;font-family:var(--font-mono,monospace);white-space:nowrap}
+.bk{color:var(--color-text-secondary);font-weight:400}
+.bv{font-weight:700}
+.bp{background:rgba(68,147,248,.1);border:1px solid rgba(68,147,248,.25);color:var(--cp)}
+.bl{background:rgba(139,148,158,.1);border:1px solid rgba(139,148,158,.25);color:var(--cl)}
+.br{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--cr)}
+.bc{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);color:var(--cc)}
+.bch{background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.25);color:var(--ch)}
+.bf{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:var(--cf)}
+.bd{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--cd)}
+.link{display:inline-flex;align-items:center;gap:2px;font-size:9px;color:var(--clk);font-style:italic;padding:1px 5px;background:rgba(16,185,129,.07);border-radius:3px;border:1px dashed rgba(16,185,129,.3);margin-left:3px;font-weight:500}
+.mnav{background:var(--color-background-secondary);border-radius:4px;padding:9px 12px;display:flex;align-items:center;gap:18px}
+.mlogo{font-weight:700;font-size:13px;color:var(--color-text-primary)}
+.mlinks{display:flex;gap:14px;color:var(--color-text-secondary);font-size:11px}
+.mcard{background:var(--color-background-secondary);border-radius:4px;padding:8px;text-align:center;min-width:70px;flex:1}
+.mfooter{background:var(--color-background-secondary);border-radius:4px;padding:9px;text-align:center;color:var(--color-text-secondary);font-size:10px}
+.mlabel{font-size:9px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;font-weight:500}
+.note{font-size:9.5px;color:var(--clk);font-style:italic;margin-top:6px;padding-left:6px;border-left:2px solid rgba(16,185,129,.4)}
+.dict-key{font-size:10px;font-weight:700;color:var(--cc);padding:2px 6px;background:rgba(167,139,250,.12);border-radius:3px;display:inline-block;margin-bottom:5px}
+.agent-box{background:var(--color-background-secondary);border-radius:6px;padding:10px 14px;display:flex;flex-direction:column;gap:4px;flex:1;min-width:130px}
+.agent-title{font-size:11px;font-weight:700;color:var(--color-text-primary);margin-bottom:4px}
+.tool-row{display:flex;align-items:center;gap:5px;padding:4px 6px;background:rgba(167,139,250,.06);border-radius:4px;border-left:2px solid var(--cc)}
+.tool-name{font-size:10px;color:var(--cc);font-weight:600}
+.tool-desc{font-size:9px;color:var(--color-text-secondary)}
+.cond-row{display:flex;align-items:center;gap:5px;padding:4px 6px;background:rgba(245,158,11,.06);border-radius:4px;border-left:2px dashed var(--cf)}
+.arr{display:flex;align-items:center;justify-content:center;padding:0 8px;font-size:18px;color:var(--color-text-secondary);flex-shrink:0}
+.state-field{display:flex;gap:4px;align-items:baseline;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.sf-name{font-size:10px;color:var(--cc);font-weight:700;min-width:160px}
+.sf-type{font-size:9px;color:var(--cf)}
+.sf-desc{font-size:9px;color:var(--color-text-secondary);font-style:italic}
+</style>
+
+<div class="wrap">
+<div class="leg">
+  <div class="li"><div class="ld" style="background:var(--cp)"></div>Graph / System</div>
+  <div class="li"><div class="ld" style="background:var(--cr)"></div>Agent</div>
+  <div class="li"><div class="ld" style="background:var(--cc)"></div>Tool / Node</div>
+  <div class="li"><div class="ld" style="background:var(--ch)"></div>Flow / Interaction</div>
+  <div class="li"><div class="ld" style="background:var(--cd)"></div>Schema / Output</div>
+  <div class="li"><div class="ld" style="background:var(--clk);border:1px dashed var(--clk)"></div>Cross-spec link</div>
+</div>
+
+<div class="tnav">
+  <button class="tb on" onclick="go('layout',this)">Layout Spec</button>
+  <button class="tb" onclick="go('component',this)">Component Spec</button>
+  <button class="tb" onclick="go('interaction',this)">Interaction Spec</button>
+  <button class="tb" onclick="go('schema',this)">Schema Spec</button>
+</div>
+
+<!-- ═══════════════ LAYOUT PANEL ═══════════════ -->
+<div class="pnl on" id="p-layout">
+  <div class="sp">
+    <div class="sh">
+      <span class="b bp"><span class="bk">graphName:</span><span class="bv">"FYPGraph"</span><span class="link">↔ all 4 specs</span></span>
+      <span class="b bp"><span class="bk">graphType:</span><span class="bv">"sequential-pipeline"</span></span>
+      <span class="b bp"><span class="bk">checkpointer:</span><span class="bv">"InMemorySaver"</span></span>
+      <span class="b bp"><span class="bk">export:</span><span class="bv">graph = orchestrator_agent</span></span>
+    </div>
+
+    <!-- Orchestrator Agent Region -->
+    <div class="sr">
+      <div class="sh">
+        <span class="b br"><span class="bk">Agent.name:</span><span class="bv">"orchestrator_agent"</span><span class="link">↔ ComponentSpec.regionComponents key</span></span>
+        <span class="b br"><span class="bk">model:</span><span class="bv">"gpt-5.4"</span></span>
+        <span class="b br"><span class="bk">reasoning.effort:</span><span class="bv">"medium"</span></span>
+        <span class="b br"><span class="bk">role:</span><span class="bv">"entry-point"</span></span>
+      </div>
+      <div class="scr">
+        <div style="margin-bottom:6px;display:flex;gap:4px;flex-wrap:wrap">
+          <span class="b bc"><span class="bk">ToolRef.id:</span><span class="bv">"update_input"</span><span class="link">→ Tool.id</span></span>
+          <span class="b bc"><span class="bk">order:</span><span class="bv">1</span></span>
+          <span class="b bc"><span class="bk">ToolRef.id:</span><span class="bv">"call_context_engineering_agent"</span><span class="link">→ Tool.id</span></span>
+          <span class="b bc"><span class="bk">order:</span><span class="bv">2</span></span>
+        </div>
+        <div class="mnav" style="gap:8px">
+          <div class="mlogo" style="font-size:11px">Orchestrator</div>
+          <div class="mlinks" style="flex-direction:column;gap:3px">
+            <span style="font-size:10px;color:var(--cc)">① update_input</span>
+            <span style="font-size:10px;color:var(--cc)">② call_context_engineering_agent</span>
+          </div>
+          <div style="margin-left:auto;font-size:9px;color:var(--clk)">→ reply summary</div>
+        </div>
+        <div class="note">Orchestrator owns routing logic only. Schema design is always delegated to context_engineering_agent.</div>
+      </div>
+    </div>
+
+    <!-- Context Engineering Agent Region -->
+    <div class="sr">
+      <div class="sh">
+        <span class="b br"><span class="bk">Agent.name:</span><span class="bv">"context_engineering_agent"</span></span>
+        <span class="b br"><span class="bk">model:</span><span class="bv">"gpt-5.4"</span></span>
+        <span class="b br"><span class="bk">reasoning.effort:</span><span class="bv">"medium"</span></span>
+        <span class="b br"><span class="bk">role:</span><span class="bv">"sub-agent / schema extractor"</span></span>
+      </div>
+      <div class="scr">
+        <div style="margin-bottom:6px;display:flex;gap:4px;flex-wrap:wrap">
+          <span class="b bc"><span class="bk">ToolRef.id:</span><span class="bv">"extract_intent_signals"</span><span class="link">→ Tool.id</span></span>
+          <span class="b bc"><span class="bk">required:</span><span class="bv">true</span></span>
+          <span class="b bf"><span class="bk">ToolRef.id:</span><span class="bv">"tavily_search_tool"</span><span class="link">→ Tool.id</span></span>
+          <span class="b bf"><span class="bk">condition:</span><span class="bv">"query has year/latest"</span></span>
+          <span class="b bf"><span class="bk">ToolRef.id:</span><span class="bv">"update_extra_requirements"</span><span class="link">→ Tool.id</span></span>
+          <span class="b bf"><span class="bk">condition:</span><span class="bv">"after tavily"</span></span>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+          <div class="agent-box" style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2)">
+            <div class="agent-title" style="color:var(--cc);font-size:10px">① extract_intent_signals</div>
+            <div style="font-size:9px;color:var(--color-text-secondary)">Always runs first</div>
+            <div style="font-size:9px;color:var(--clk)">→ state.design_schema</div>
+          </div>
+          <div class="arr">→</div>
+          <div class="agent-box" style="background:rgba(245,158,11,.05);border:1px dashed rgba(245,158,11,.25)">
+            <div class="agent-title" style="color:var(--cf);font-size:10px">② tavily_search_tool</div>
+            <div style="font-size:9px;color:var(--color-text-secondary)">Conditional only</div>
+            <div style="font-size:9px;color:var(--clk)">→ state.tavily_search_result</div>
+          </div>
+          <div class="arr">→</div>
+          <div class="agent-box" style="background:rgba(245,158,11,.05);border:1px dashed rgba(245,158,11,.25)">
+            <div class="agent-title" style="color:var(--cf);font-size:10px">③ update_extra_requirements</div>
+            <div style="font-size:9px;color:var(--color-text-secondary)">Conditional only</div>
+            <div style="font-size:9px;color:var(--clk)">→ state.design_schema.extra_requirements</div>
+          </div>
+        </div>
+        <div class="note">Context agent MUST call extract_intent_signals before any other action. Tavily tools only trigger when query contains explicit time signals (year / "latest" / "current").</div>
+      </div>
+    </div>
+
+    <!-- State / Output Region -->
+    <div class="sr" style="border-color:var(--cd)">
+      <div class="sh">
+        <span class="b bd"><span class="bk">Output:</span><span class="bv">"state.design_schema"</span><span class="link">↔ SchemaSpec</span></span>
+        <span class="b bd"><span class="bk">type:</span><span class="bv">DesignSchema (Pydantic)</span></span>
+      </div>
+      <div class="scr" style="border-color:var(--cd)">
+        <div style="margin-bottom:6px;display:flex;gap:4px;flex-wrap:wrap">
+          <span class="b bd"><span class="bk">field:</span><span class="bv">ui</span></span>
+          <span class="b bd"><span class="bk">field:</span><span class="bv">theme</span></span>
+          <span class="b bd"><span class="bk">field:</span><span class="bv">features</span></span>
+          <span class="b bd"><span class="bk">field:</span><span class="bv">constraints</span></span>
+          <span class="b bd"><span class="bk">field:</span><span class="bv">extra_requirements</span></span>
+        </div>
+        <div class="mfooter" style="font-size:10px;text-align:left;padding:8px 12px">
+          Consumed downstream for HTML/CSS/JS generation. Layout uses placement only; schema structure defined in Schema Spec tab.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ COMPONENT PANEL ═══════════════ -->
+<div class="pnl" id="p-component">
+  <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">
+    <span class="b bp"><span class="bk">graphName:</span><span class="bv">"FYPGraph"</span></span>
+    <span class="b bp"><span class="bk">AgentState.regionComponents:</span><span class="bv">Dict[str, List[Tool]]</span></span>
+  </div>
+
+  <!-- State Schema -->
+  <div style="background:var(--color-background-secondary);padding:10px;border-radius:6px;border:1px dashed var(--color-border-tertiary);margin-bottom:12px">
+    <div class="dict-key">state(AgentState) — shared across all agents<span style="font-weight:400;color:var(--color-text-secondary);font-size:9px;margin-left:6px">↔ all regions</span></div>
+    <div style="display:flex;flex-direction:column;gap:2px">
+      <div class="state-field"><span class="sf-name">input_query</span><span class="sf-type">str = ""</span><span class="sf-desc">Raw user request for this run</span></div>
+      <div class="state-field"><span class="sf-name">compiled_query</span><span class="sf-type">str = ""</span><span class="sf-desc">Concise rewrite for downstream processing</span></div>
+      <div class="state-field"><span class="sf-name">design_schema</span><span class="sf-type">Dict[str, Any] = {}</span><span class="sf-desc">Populated by context agent → consumed by code-gen</span></div>
+      <div class="state-field"><span class="sf-name">tavily_search_result</span><span class="sf-type">str = ""</span><span class="sf-desc">Raw Tavily JSON summary (time-sensitive context)</span></div>
+      <div class="state-field"><span class="sf-name">layout_specification</span><span class="sf-type">Dict[str, Any] = {}</span><span class="sf-desc">Structured layout spec for UI generation</span></div>
+      <div class="state-field"><span class="sf-name">components_specification</span><span class="sf-type">Dict[str, Any] = {}</span><span class="sf-desc">Structured components spec for UI generation</span></div>
+      <div class="state-field"><span class="sf-name">interactions_specification</span><span class="sf-type">Dict[str, Any] = {}</span><span class="sf-desc">Structured interactions spec for UI generation</span></div>
+      <div class="state-field"><span class="sf-name">decoration_specification</span><span class="sf-type">Dict[str, Any] = {}</span><span class="sf-desc">Structured decorations spec for UI generation</span></div>
+    </div>
+  </div>
+
+  <!-- Orchestrator tools -->
+  <div style="background:var(--color-background-secondary);padding:10px;border-radius:6px;border:1px dashed var(--color-border-tertiary);margin-bottom:10px">
+    <div class="dict-key">"orchestrator_agent": [...]<span style="font-weight:400;color:var(--color-text-secondary);font-size:9px;margin-left:6px">↔ Agent.name in LayoutSpec</span></div>
+
+    <div class="sc" style="margin-top:0">
+      <div class="sh">
+        <span class="b bc"><span class="bk">id:</span><span class="bv">"call_context_engineering_agent"</span><span class="link">↔ Layout, Interaction, Schema</span></span>
+        <span class="b bc"><span class="bk">decorator:</span><span class="bv">@tool</span></span>
+        <span class="b bc"><span class="bk">ownedBy:</span><span class="bv">"Python"</span></span>
+        <span class="b bc"><span class="bk">role:</span><span class="bv">["sub-agent-call","state-update","stream-relay"]</span></span>
+      </div>
+
+      <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+        <div style="flex:0 0 140px">
+          <div class="mlabel">runtime · signature</div>
+          <div style="background:var(--color-background-secondary);border-radius:6px;padding:10px;border:1px solid var(--color-border-tertiary)">
+            <div style="font-size:10px;color:var(--cp);font-weight:600;margin-bottom:5px">ToolRuntime[state]</div>
+            <div style="font-size:9px;color:var(--color-text-secondary);margin-bottom:3px">arg: query: str</div>
+            <div style="font-size:9px;color:var(--clk);margin-bottom:7px">→ Command(update)</div>
+            <div style="font-size:9px;color:var(--cc);border-top:1px solid var(--color-border-tertiary);padding-top:5px">Streams custom chunks from sub-agent back to orchestrator writer</div>
+          </div>
+        </div>
+
+        <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:9px">
+          <div>
+            <div class="mlabel">state reads · writes</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <span class="b bf"><span class="bk">reads:</span><span class="bv">"state.input_query"</span></span>
+              <span class="b bd"><span class="bk">writes:</span><span class="bv">"state.design_schema"</span></span>
+            </div>
+          </div>
+          <div>
+            <div class="mlabel">states <span style="text-transform:none;letter-spacing:0;font-style:italic;color:var(--clk)">— used by Interaction Spec</span></div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <span class="b bf"><span class="bv">idle</span></span>
+              <span class="b bf"><span class="bv">invoking</span></span>
+              <span class="b bf"><span class="bv">streaming</span></span>
+              <span class="b bf"><span class="bv">completed</span></span>
+              <span class="b bf"><span class="bv">error</span></span>
+            </div>
+          </div>
+          <div>
+            <div class="mlabel">events <span style="text-transform:none;letter-spacing:0;font-style:italic;color:var(--clk)">— flowName binds to InteractionFlow.name</span></div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <span class="b bf"><span class="bk">event:</span><span class="bv">"onComplete"</span><span class="bk">,</span><span class="bk">flowName:</span><span class="bv">"OrchestratorPipeline"</span><span class="link">→ Interaction</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--color-border-tertiary)">
+        <div class="mlabel" style="margin-bottom:6px">middleware[] — wraps each tool call</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <div class="scr">
+            <span class="b bc"><span class="bk">id:</span><span class="bv">"reset_before"</span></span>
+            <span class="b bc"><span class="bk">decorator:</span><span class="bv">@before_agent</span></span>
+          </div>
+          <div class="scr">
+            <span class="b bc"><span class="bk">id:</span><span class="bv">"orchestrator_progress"</span></span>
+            <span class="b bc"><span class="bk">decorator:</span><span class="bv">@before_agent</span></span>
+          </div>
+          <div class="scr">
+            <span class="b bc"><span class="bk">id:</span><span class="bv">"orchestrator_tool_progress"</span></span>
+            <span class="b bc"><span class="bk">decorator:</span><span class="bv">@wrap_tool_call</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Context agent tools -->
+  <div style="background:var(--color-background-secondary);padding:10px;border-radius:6px;border:1px dashed var(--color-border-tertiary)">
+    <div class="dict-key">"context_engineering_agent": [...]<span style="font-weight:400;color:var(--color-text-secondary);font-size:9px;margin-left:6px">↔ Agent.name in LayoutSpec</span></div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:4px">
+      <div class="scr" style="flex:1;min-width:140px">
+        <span class="b bc"><span class="bk">id:</span><span class="bv">"extract_intent_signals"</span></span>
+        <div style="font-size:9px;color:var(--color-text-secondary);margin-top:4px">Reads: state.input_query</div>
+        <div style="font-size:9px;color:var(--clk)">Writes: state.design_schema</div>
+        <div style="font-size:9px;color:var(--cf);margin-top:2px">Required: always first</div>
+      </div>
+      <div class="scr" style="flex:1;min-width:140px">
+        <span class="b bf"><span class="bk">id:</span><span class="bv">"tavily_search_tool"</span></span>
+        <div style="font-size:9px;color:var(--color-text-secondary);margin-top:4px">Reads: state.input_query</div>
+        <div style="font-size:9px;color:var(--clk)">Writes: state.tavily_search_result</div>
+        <div style="font-size:9px;color:var(--cf);margin-top:2px">Conditional: time signals only</div>
+      </div>
+      <div class="scr" style="flex:1;min-width:140px">
+        <span class="b bf"><span class="bk">id:</span><span class="bv">"update_extra_requirements"</span></span>
+        <div style="font-size:9px;color:var(--color-text-secondary);margin-top:4px">Reads: design_schema + tavily</div>
+        <div style="font-size:9px;color:var(--clk)">Writes: design_schema.extra_requirements</div>
+        <div style="font-size:9px;color:var(--cf);margin-top:2px">Conditional: after tavily</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ INTERACTION PANEL ═══════════════ -->
+<div class="pnl" id="p-interaction">
+  <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px">
+    <span class="b bp"><span class="bk">graphName:</span><span class="bv">"FYPGraph"</span></span>
+  </div>
+
+  <!-- Orchestrator Pipeline Flow -->
+  <div style="border:1.5px solid var(--ch);border-radius:6px;padding:8px 10px;margin-bottom:14px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+    <span class="b bch"><span class="bk">flow.name:</span><span class="bv">"OrchestratorPipeline"</span><span class="link">↔ ComponentEvent.flowName</span></span>
+    <span class="b bch"><span class="bk">description:</span><span class="bv">"Routes user query through CE agent and returns design_schema"</span></span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:0;align-items:start;margin-bottom:20px">
+    <!-- TRIGGER -->
+    <div style="border:1.5px solid rgba(68,147,248,.4);border-radius:6px;padding:10px">
+      <div style="font-size:9px;letter-spacing:.06em;color:var(--cp);margin-bottom:8px;font-weight:700;text-transform:uppercase">① Trigger</div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <span class="b bp"><span class="bk">event:</span><span class="bv">"HumanMessage"</span></span>
+        <span class="b bp"><span class="bk">targetId:</span><span class="bv">"orchestrator_agent"</span><span class="link">✓ Agent.name</span></span>
+        <span class="b bp"><span class="bk">input:</span><span class="bv">state.input_query</span></span>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;padding:0 6px;padding-top:38px;color:var(--color-text-secondary);font-size:14px">→</div>
+    <!-- ACTIONS -->
+    <div style="border:1.5px solid rgba(245,158,11,.4);border-radius:6px;padding:10px">
+      <div style="font-size:9px;letter-spacing:.06em;color:var(--cf);margin-bottom:8px;font-weight:700;text-transform:uppercase">② Actions</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="padding:6px 8px;background:rgba(245,158,11,.06);border-radius:4px;border-left:2px solid var(--cf)">
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <span class="b bf"><span class="bk">type:</span><span class="bv">"toolCall"</span></span>
+            <span class="b bf"><span class="bk">targetId:</span><span class="bv">"update_input"</span><span class="link">✓ Tool.id</span></span>
+            <span class="b bf"><span class="bk">result:</span><span class="bv">state.input_query persisted</span></span>
+          </div>
+        </div>
+        <div style="padding:6px 8px;background:rgba(245,158,11,.06);border-radius:4px;border-left:2px solid var(--cf)">
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <span class="b bf"><span class="bk">type:</span><span class="bv">"subAgentCall"</span></span>
+            <span class="b bf"><span class="bk">targetId:</span><span class="bv">"call_context_engineering_agent"</span></span>
+            <span class="b bf"><span class="bk">streams:</span><span class="bv">custom writer chunks</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;padding:0 6px;padding-top:38px;color:var(--color-text-secondary);font-size:14px">→</div>
+    <!-- STATE TRANSITIONS -->
+    <div style="border:1.5px solid rgba(45,212,191,.4);border-radius:6px;padding:10px">
+      <div style="font-size:9px;letter-spacing:.06em;color:var(--cr);margin-bottom:8px;font-weight:700;text-transform:uppercase">③ State Transitions</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div>
+          <span class="b br" style="margin-bottom:4px;display:inline-block"><span class="bk">agent:</span><span class="bv">"orchestrator_agent"</span></span>
+          <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:3px">
+            <span class="b" style="background:rgba(139,148,158,.1);border:1px solid rgba(139,148,158,.3);color:var(--cl)">{}</span>
+            <span style="color:var(--color-text-secondary);font-size:11px">→</span>
+            <span class="b br">{design_schema: populated}</span>
+          </div>
+          <div style="margin-top:4px"><span class="link">✓ state fields declared on AgentState</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Context Agent sub-flow -->
+  <div style="border:1.5px solid var(--ch);border-radius:6px;padding:8px 10px;margin-bottom:14px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+    <span class="b bch"><span class="bk">flow.name:</span><span class="bv">"ContextEngineeringFlow"</span><span class="link">↔ invoked by OrchestratorPipeline</span></span>
+    <span class="b bch"><span class="bk">description:</span><span class="bv">"Extracts DesignSchema; optionally enriches with Tavily context"</span></span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:0;align-items:start">
+    <!-- TRIGGER -->
+    <div style="border:1.5px solid rgba(68,147,248,.4);border-radius:6px;padding:10px">
+      <div style="font-size:9px;letter-spacing:.06em;color:var(--cp);margin-bottom:8px;font-weight:700;text-transform:uppercase">① Trigger</div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <span class="b bp"><span class="bk">event:</span><span class="bv">"subAgentInvoke"</span></span>
+        <span class="b bp"><span class="bk">targetId:</span><span class="bv">"context_engineering_agent"</span></span>
+        <span class="b bp"><span class="bk">input:</span><span class="bv">query (str)</span></span>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;padding:0 6px;padding-top:38px;color:var(--color-text-secondary);font-size:14px">→</div>
+    <!-- ACTIONS -->
+    <div style="border:1.5px solid rgba(245,158,11,.4);border-radius:6px;padding:10px">
+      <div style="font-size:9px;letter-spacing:.06em;color:var(--cf);margin-bottom:8px;font-weight:700;text-transform:uppercase">② Actions</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="padding:6px 8px;background:rgba(245,158,11,.06);border-radius:4px;border-left:2px solid var(--cf)">
+          <span class="b bf"><span class="bk">type:</span><span class="bv">"toolCall"</span></span>
+          <span class="b bf" style="margin-left:3px"><span class="bk">targetId:</span><span class="bv">"extract_intent_signals"</span></span>
+        </div>
+        <div style="padding:6px 8px;background:rgba(245,158,11,.04);border-radius:4px;border-left:2px dashed var(--cf)">
+          <span class="b bf" style="opacity:.7"><span class="bk">[if time signal]</span><span class="bv">"tavily_search_tool"</span></span>
+        </div>
+        <div style="padding:6px 8px;background:rgba(245,158,11,.04);border-radius:4px;border-left:2px dashed var(--cf)">
+          <span class="b bf" style="opacity:.7"><span class="bk">[if tavily ran]</span><span class="bv">"update_extra_requirements"</span></span>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;padding:0 6px;padding-top:38px;color:var(--color-text-secondary);font-size:14px">→</div>
+    <!-- STATE TRANSITIONS -->
+    <div style="border:1.5px solid rgba(45,212,191,.4);border-radius:6px;padding:10px">
+      <div style="font-size:9px;letter-spacing:.06em;color:var(--cr);margin-bottom:8px;font-weight:700;text-transform:uppercase">③ State Transitions</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div>
+          <span class="b br" style="margin-bottom:4px;display:inline-block"><span class="bk">state:</span><span class="bv">"design_schema"</span></span>
+          <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:3px">
+            <span class="b" style="background:rgba(139,148,158,.1);border:1px solid rgba(139,148,158,.3);color:var(--cl)">{}</span>
+            <span style="color:var(--color-text-secondary);font-size:11px">→</span>
+            <span class="b br">DesignSchema{...}</span>
+          </div>
+        </div>
+        <div>
+          <span class="b br" style="margin-bottom:4px;display:inline-block"><span class="bk">state:</span><span class="bv">"extra_requirements"</span></span>
+          <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:3px">
+            <span class="b" style="background:rgba(139,148,158,.1);border:1px solid rgba(139,148,158,.3);color:var(--cl)">[]</span>
+            <span style="color:var(--color-text-secondary);font-size:11px">→</span>
+            <span class="b br">["...time items"]</span>
+          </div>
+          <div style="margin-top:4px"><span class="link">✓ only if Tavily ran</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SCHEMA PANEL ═══════════════ -->
+<div class="pnl" id="p-schema">
+  <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">
+    <span class="b bd"><span class="bk">DesignSchema.globalTokens:</span><span class="bv">{ui, theme, features, constraints, extra_requirements}</span></span>
+  </div>
+
+  <div class="sd">
+    <div class="sh" style="border-bottom-color:rgba(52,211,153,.3)">
+      <span class="b bd"><span class="bk">graphName:</span><span class="bv">"FYPGraph"</span></span>
+      <span class="b bd"><span class="bk">schemaClass:</span><span class="bv">DesignSchema(BaseModel)</span></span>
+      <span class="b bd"><span class="bk">method:</span><span class="bv">"function_calling"</span></span>
+    </div>
+
+    <div style="border:1.5px solid rgba(52,211,153,.4);border-radius:8px;padding:10px">
+      <!-- Double-link header -->
+      <div class="sh" style="border-bottom-color:rgba(52,211,153,.2)">
+        <span class="b bd"><span class="bk">ComponentSchema.id:</span><span class="bv">"DesignSchema"</span><span class="link">✓ state.design_schema type</span></span>
+        <span class="b bd"><span class="bk">validator:</span><span class="bv">Pydantic v2</span><span class="link">✓ field_validator on tech_stack</span></span>
+      </div>
+
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start">
+        <!-- Sub-schema preview -->
+        <div style="flex:0 0 auto;min-width:260px">
+          <div class="mlabel" style="margin-bottom:6px">sub-schemas — visual field map</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            <div style="background:var(--color-background-secondary);border-radius:6px;padding:8px;border:1px solid rgba(68,147,248,.3);min-width:60px;flex:1">
+              <div style="font-size:9px;color:var(--cp);font-weight:700;text-align:center;margin-bottom:4px">UI</div>
+              <div style="font-size:8px;color:var(--color-text-secondary);line-height:1.5">type<br>variant<br>style<br>density<br>navigation<br>feedback_components</div>
+            </div>
+            <div style="background:var(--color-background-secondary);border-radius:6px;padding:8px;border:1px solid rgba(167,139,250,.3);min-width:60px;flex:1">
+              <div style="font-size:9px;color:var(--cc);font-weight:700;text-align:center;margin-bottom:4px">Theme</div>
+              <div style="font-size:8px;color:var(--color-text-secondary);line-height:1.5">primary_color<br>secondary_color<br>mode</div>
+            </div>
+            <div style="background:var(--color-background-secondary);border-radius:6px;padding:8px;border:1px solid rgba(45,212,191,.3);min-width:60px;flex:1">
+              <div style="font-size:9px;color:var(--cr);font-weight:700;text-align:center;margin-bottom:4px">Features</div>
+              <div style="font-size:8px;color:var(--color-text-secondary);line-height:1.5">search<br>filter<br>sorting<br>cart<br>wishlist<br>reviews</div>
+            </div>
+            <div style="background:var(--color-background-secondary);border-radius:6px;padding:8px;border:1px solid rgba(245,158,11,.3);min-width:60px;flex:1;opacity:.85">
+              <div style="font-size:9px;color:var(--cf);font-weight:700;text-align:center;margin-bottom:4px">Constraints</div>
+              <div style="font-size:8px;color:var(--color-text-secondary);line-height:1.5">tech_stack<br><span style="color:var(--cf);font-style:italic">FIXED: ["html","css","js"]</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Field breakdown -->
+        <div style="flex:1;min-width:200px;display:flex;flex-direction:column;gap:9px">
+          <div>
+            <div class="mlabel">UI sub-schema fields</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <span class="b bd"><span class="bk">type:</span><span class="bv">"product_listing"</span></span>
+              <span class="b bd"><span class="bk">variant:</span><span class="bv">"grid"</span></span>
+              <span class="b bd"><span class="bk">style:</span><span class="bv">"modern"</span></span>
+              <span class="b bd"><span class="bk">density:</span><span class="bv">"compact"</span></span>
+              <span class="b bd"><span class="bk">navigation:</span><span class="bv">"top_nav"</span></span>
+            </div>
+          </div>
+          <div>
+            <div class="mlabel">Theme · Features fields <span style="text-transform:none;letter-spacing:0;font-style:italic;color:var(--clk)">— Optional[bool] or Optional[str]; null = not specified</span></div>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <span class="b bd"><span class="bk">{theme.mode:</span><span class="bv">"dark"</span><span class="bk">, theme.primary_color:</span><span class="bv">null}</span></span>
+              <span class="b bd"><span class="bk">{features.search:</span><span class="bv">true</span><span class="bk">, features.reviews:</span><span class="bv">null}</span></span>
+            </div>
+          </div>
+          <div>
+            <div class="mlabel">Constraints · extra_requirements</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap">
+              <span class="b bd"><span class="bk">tech_stack:</span><span class="bv">["html","css","javascript"]</span><span class="link">force_fixed_tech_stack validator</span></span>
+              <span class="b bd"><span class="bk">extra_requirements:</span><span class="bv">List[str ≤12 words]</span></span>
+            </div>
+          </div>
+          <div>
+            <div class="mlabel">example output — few-shot from prompt</div>
+            <div style="background:var(--color-background-secondary);border-radius:4px;padding:8px;border:1px solid var(--color-border-tertiary);font-size:9px;color:var(--color-text-secondary);line-height:1.7">
+              Query: <span style="color:var(--cp)">"dark-mode sneaker store with filters, sorting, cart"</span><br>
+              → ui.type: <span style="color:var(--cc)">"product_listing"</span> · ui.variant: <span style="color:var(--cc)">"grid"</span><br>
+              → theme.mode: <span style="color:var(--cc)">"dark"</span><br>
+              → features.filter/sorting/cart: <span style="color:var(--cd)">true</span><br>
+              → extra_requirements: <span style="color:var(--cf)">["Sticky promo banner on scroll"]</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+function go(name,btn){
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('p-'+name).classList.add('on');
+}
+</script>
