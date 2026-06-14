@@ -1,4 +1,4 @@
-# UIGPT — AI-Driven B2C UI Generation System
+# UIGPT — AI-Driven B2C UI Generation System (In Progress)
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
 ![LangGraph](https://img.shields.io/badge/LangGraph-1.0+-1C3C3C?logo=chainlink&logoColor=white)
