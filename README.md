@@ -1,4 +1,4 @@
-# UIGPT — AI-Driven B2C UI Generation System (In Progress)
+# WebForge : Autonomous B2C Webapp Development via Multi-Expert Agent Orchestration (In Progress)
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
 ![LangGraph](https://img.shields.io/badge/LangGraph-1.0+-1C3C3C?logo=chainlink&logoColor=white)
@@ -8,7 +8,7 @@
 ![deepagents](https://img.shields.io/badge/deepagents-0.3+-4a90d9)
 ![Status](https://img.shields.io/badge/Status-In%20Progress-yellow)
 
-> A **multi-agent system** that generates a complete B2C e-commerce single-page webapp (HTML + CSS + JS) from a natural language request — orchestrated by a LangGraph agent graph, with per-language developer agents that generate, lint, and iteratively self-correct their own output.
+> A **multi-expert agent collaboration system** that autonomously generates a complete B2C e-commerce webapp (HTML + CSS + JS) from a natural language request — with specialised agents for planning, code generation, linting, and self-correction, orchestrated via a LangGraph agent graph.
 
 ---
 
@@ -22,14 +22,13 @@
 4. [Key Characteristics](#key-characteristics)
 5. [Project Structure](#project-structure)
 6. [Setup & Usage](#setup--usage)
-7. [Development Roadmap](#development-roadmap)
-8. [Contributors](#contributors)
+7. [Contributors](#contributors)
 
 ---
 
 ## Overview
 
-UIGPT takes a user's natural language description of a B2C e-commerce page and produces a fully linted, semantically tagged HTML/CSS/JS single-page webapp.
+WebForge takes a user's natural language description of a B2C e-commerce page and produces a fully linted, semantically tagged HTML/CSS/JS single-page webapp.
 
 The pipeline is driven by a **hierarchical multi-agent system**:
 
@@ -232,39 +231,6 @@ The chat UI will open in your browser. Type a description of the B2C page you wa
 
 ```bash
 python test_schemas.py
-```
-
----
-
-## Development Roadmap
-
-```
-✅ B2C Spec Schema Revision
-   ├── Added: PageType, ComponentCategory (24 values), DataBindingSpec, ActionResultState
-   ├── Removed: ComponentRole, LayoutComponentRef, componentRefs, role, layoutRef
-   ├── ActionType: removed apiCall/log; added 5 B2C-specific actions
-   ├── test_schemas.py — 48/48 passing (10 sections)
-   └── spec_crossref.html — interactive cross-reference diagram
-
-✅ HTML Agent — Generation + Modification
-   ├── Split State: html_specification → layout_specification + components_specification
-   ├── Updated system prompt: componentCategory → data-component, B2C pageType guidance
-   ├── validate_component_tags: all-depths check for semantic elements
-   └── Self-correcting lint loop (html-validate)
-
-⏳ HTML Agent — Supplementary Tests (S1–S6 tool unit tests)
-
-⬜ CSS Agent
-   ├── store_css_code, run_stylelint
-   └── Generation-only system prompt (no extract/diff)
-
-⬜ JS Agent
-   ├── store_js_code, run_eslint
-   └── Generation-only system prompt
-
-⬜ Test Generation Agent + Test Executor Agent (Playwright)
-
-⬜ End-to-end integration — stream_lit.py intent wiring + full pipeline test
 ```
 
 ---
