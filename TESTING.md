@@ -29,7 +29,7 @@ External processes (`npx html-validate`, `npx eslint`, `npx stylelint`) are mock
 |---|---|---:|---|
 | `run_html_validate` | HTML | 5 | empty input guard; malformed HTML; validator error output |
 | `store_html_code` | HTML | 9 | missing `<link>`/`<script>` include tags; spec component not addressable; modify-mode exemption; missing-`session_id` back-compat |
-| `extract_component` | HTML | 5 | selector not found; `#id` / `.class` / bare-name resolution |
+| `extract_component` | HTML | 8 | selector not found; `#id` / `.class` / bare-name resolution; **`target_instance` selects the Nth match**; instance out of range; extract and `store_html_diff` proven to agree on the same element |
 | `store_html_diff` | HTML | 7 | empty `html_code`; component not found; instance out of range; malformed patch |
 | `validate_component_tags` | HTML | 5 | missing required attributes at depth |
 | `run_eslint` | JS | 13 | empty input; **errors block / warnings never block**; `npx` missing; unparseable CLI output; flat-config invocation |
@@ -164,6 +164,28 @@ marker the generator emits round-trips through the regex for 1–5 blocks.
 **Prompt change.** Both modification prompts now describe the multi-block document and forbid
 editing the separator lines. This is the "LLMs decide, Python guarantees" split again: the
 prompt asks for the markers to be preserved, `_split_blocks` enforces it.
+
+---
+
+## `extract_component` instance mismatch — FIXED
+
+**Defect.** `extract_component` returned `str(matches[0])` — always the first match — while
+`store_html_diff` patched `matches[instance - 1]`. For any `target_instance > 1` the model was
+shown one element and its diff applied to a different one. Because `_apply_patch` verifies
+context lines, this usually surfaced as a confusing "hunk does not match" failure; but when the
+instances had identical markup — the normal case for a repeated component like `.product-card`
+— the patch applied cleanly **to the wrong element**.
+
+**Fix.** `extract_component` now reads `target_instance` (1-based, default 1), applies the same
+range check `store_html_diff` uses, and returns `str(matches[instance - 1])`. The range check
+matters as much as the indexing: the model can no longer be shown an element that
+`store_html_diff` would refuse.
+
+**Verification.** Three new cases (6–8) covering Nth-match selection, out-of-range rejection,
+and — the load-bearing one — building a diff from what `extract_component` returned for
+instance 3 and asserting `store_html_diff` patched that same instance while leaving the others
+untouched. Confirmed load-bearing by running the current tests against the old `matches[0]`
+tool: they fail.
 
 ---
 
