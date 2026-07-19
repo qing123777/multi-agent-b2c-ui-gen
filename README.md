@@ -8,7 +8,7 @@
 ![deepagents](https://img.shields.io/badge/deepagents-0.3+-4a90d9)
 ![Status](https://img.shields.io/badge/Status-In%20Progress-yellow)
 
-> A **multi-expert agent collaboration system** that autonomously generates a complete B2C e-commerce webapp (HTML + CSS + JS) from a natural language request — with specialised agents for planning, code generation, linting, and self-correction, orchestrated via a LangGraph agent graph.
+> A **multi-expert agent collaboration system** that autonomously generates a complete **frontend** B2C e-commerce webapp (HTML + CSS + JS) from a natural language request — with specialised agents for planning, frontend code generation, linting, and self-correction, orchestrated via a LangGraph agent graph.
 
 ---
 
@@ -28,7 +28,7 @@
 
 ## Overview
 
-WebForge takes a user's natural language description of a B2C e-commerce page and produces a fully linted, semantically tagged HTML/CSS/JS single-page webapp.
+WebForge takes a user's natural language description of a B2C e-commerce page and produces a fully linted, semantically tagged HTML/CSS/JS frontend webapp (single or multi-page).
 
 The pipeline is driven by a **hierarchical multi-agent system**:
 
@@ -141,8 +141,8 @@ The pipeline separates concerns across specialised agents: intent extraction, mu
 ### 2. Four-Schema Structured Planning
 Rather than generating code directly from a natural language request, the System Planning Agent first produces four cross-linked Pydantic schemas. These act as a verifiable, machine-readable contract that constrain what the developer agents are allowed to generate — preventing hallucinated components or inconsistent page structure.
 
-### 3. Self-Correcting Developer Agents
-Each developer agent (HTML, CSS, JS) runs a self-correcting loop: generate → lint → fix → repeat until the linter reports zero errors. The agent never writes the final file until `lint_passed = True`, making the generated output syntactically valid by construction.
+### 3. Self-Correcting Frontend Developer Agents
+Each frontend developer agent (HTML, CSS, JS) runs a self-correcting loop: generate → lint → fix → repeat until the linter reports zero errors. The agent never writes the final file until `lint_passed = True`, making the generated frontend output syntactically valid by construction. No backend or server-side code is generated — WebForge is intentionally scoped to frontend delivery only.
 
 ### 4. Semantic Component Tagging
 Every semantic HTML element (`nav`, `header`, `footer`, `section`, `main`, `aside`, `article`) is required to carry three `data-*` attributes — `data-page`, `data-component` (sourced from `componentCategory` in the spec), and `data-instance` — enforced by `validate_component_tags()` before any file is written. This makes the DOM directly addressable for modification mode and future test automation.
